@@ -55,7 +55,7 @@ function updateWeatherData() {
 }
 
 // Update weather data and store it in MongoDB every 2 seconds
-setInterval(updateWeatherData, 2000);
+setInterval(updateWeatherData, 10000);
 
 app.get('/weather', (req, res) => {
   res.json({
