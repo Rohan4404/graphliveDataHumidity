@@ -5,15 +5,22 @@ const app = express();
 require("dotenv").config();
 const port = 3000;
 app.use(cors());
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/weatherDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch((error) => {
-  console.error('Error connecting to MongoDB:', error);
-});
+
+// Correct MongoDB connection string
+// const mongoUri = 'mongodb+srv://rohan4404:Hapur@123@cluster0.cnvpvij.mongodb.net/Cluster0?retryWrites=true&w=majority';
+
+// const mongoUri = "mongodb+srv://rohan4404:Hapur@123@cluster0.cnvpvij.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const mongoUri = "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0"
+
+// FCkDAmWBuW3bEwRT
+
+mongoose.connect(mongoUri)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
 
 // Define the weather schema and model
 const weatherSchema = new mongoose.Schema({
