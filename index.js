@@ -33,10 +33,10 @@ let humidity = Math.random() * 30 + 50; // Initial humidity
 let temperature = 20; // Default initial temperature
 
 function updateWeatherData() {
-  // Create a new weather data entry
+  // Create a new weather data entry with the current temperature
   const newWeatherData = new Weather({
     Humidity: humidity.toFixed(2),
-    temperature: temperature.toFixed(2)
+    temperature: temperature.toFixed(2) // Use the latest temperature
   });
 
   // Save the weather data to MongoDB
