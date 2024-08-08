@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const port = 3000;
+
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 app.use(express.static('public')); // Serve static files from the 'public' directory
@@ -58,12 +59,22 @@ app.post('/set-temperature', (req, res) => {
   }
 });
 
-// Get the current weather data
-app.get('/weather', (req, res) => {
-  res.json({
-    Humidity: humidity.toFixed(2),
-    temperature: temperature.toFixed(2)
-  });
+// Get the most recent weather data from the database
+app.get('/weather', async (req, res) => {
+  try {
+    const latestWeather = await Weather.findOne().sort({ timestamp: -1 }); // Get the most recent entry
+    if (latestWeather) {
+      res.json({
+        Humidity: latestWeather.Humidity.toFixed(2),
+        temperature: latestWeather.temperature.toFixed(2)
+      });
+    } else {
+      res.status(404).json({ message: 'No weather data found' });
+    }
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 app.listen(port, () => {
