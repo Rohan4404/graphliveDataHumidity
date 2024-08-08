@@ -4,12 +4,12 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const port = 3000;
-
 app.use(cors());
-app.use(express.json());
-app.use(express.static('public')); // Serve static files from the "public" directory
+app.use(express.json()); // To parse JSON bodies
+app.use(express.static('public')); // Serve static files from the 'public' directory
 
-const mongoUri = "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0"
+// Correct MongoDB connection string
+const mongoUri = "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(mongoUri)
   .then(() => {
@@ -28,38 +28,41 @@ const weatherSchema = new mongoose.Schema({
 
 const Weather = mongoose.model('Weather', weatherSchema);
 
-let Humidity = Math.random() * 30 + 50;
-let temperature = Math.random() * 25 + 10;
+let humidity = Math.random() * 30 + 50; // Initial humidity
+let temperature = 20; // Default initial temperature
 
-// Function to save weather data to MongoDB
-function saveWeatherData(temperature) {
-  Humidity = Math.random() * 30 + 50;
-
+function updateWeatherData() {
+  // Create a new weather data entry
   const newWeatherData = new Weather({
-    Humidity: Humidity.toFixed(2),
-    temperature: temperature.toFixed(2),
+    Humidity: humidity.toFixed(2),
+    temperature: temperature.toFixed(2)
   });
 
+  // Save the weather data to MongoDB
   newWeatherData.save()
     .then(() => console.log('Weather data saved to MongoDB'))
     .catch((error) => console.error('Error saving weather data:', error));
 }
 
-// Route to handle form submission
-app.post('/update-weather', (req, res) => {
-  const { temperature } = req.body;
-  if (!temperature) {
-    return res.status(400).json({ error: 'Temperature is required' });
-  }
+// Update weather data and store it in MongoDB every 10 seconds
+setInterval(updateWeatherData, 10000);
 
-  saveWeatherData(temperature);
-  res.status(200).json({ message: 'Temperature updated successfully' });
+// Endpoint to set temperature from input
+app.post('/set-temperature', (req, res) => {
+  const { temp } = req.body; // Get temperature from the request body
+  if (typeof temp === 'number') {
+    temperature = temp; // Update the temperature variable
+    res.status(200).json({ message: 'Temperature updated successfully' });
+  } else {
+    res.status(400).json({ message: 'Invalid temperature value' });
+  }
 });
 
+// Get the current weather data
 app.get('/weather', (req, res) => {
   res.json({
-    Humidity: Humidity.toFixed(2),
-    temperature: temperature.toFixed(2),
+    Humidity: humidity.toFixed(2),
+    temperature: temperature.toFixed(2)
   });
 });
 
