@@ -24,7 +24,7 @@ mongoose.connect(mongoUri)
 
 // Define the weather schema and model
 const weatherSchema = new mongoose.Schema({
-  humidity: Number,
+  Humidity: Number,
   temperature: Number,
   airFlow: Number,
   timestamp: { type: Date, default: Date.now }
@@ -32,18 +32,18 @@ const weatherSchema = new mongoose.Schema({
 
 const Weather = mongoose.model('Weather', weatherSchema);
 
-let humidity = Math.random() * 30 + 50;
+let Humidity = Math.random() * 30 + 50;
 let temperature = Math.random() * 25 + 10;
 let airFlow = Math.random() * 200 + 200;
 
 function updateWeatherData() {
-  humidity = Math.random() * 30 + 50;
+  Humidity = Math.random() * 30 + 50;
   temperature = Math.random() * 25 + 10;
   airFlow = Math.random() * 200 + 200;
 
   // Create a new weather data entry
   const newWeatherData = new Weather({
-    humidity: humidity.toFixed(2),
+    Humidity: Humidity.toFixed(2),
     temperature: temperature.toFixed(2),
     airFlow: airFlow.toFixed(2)
   });
@@ -59,7 +59,7 @@ setInterval(updateWeatherData, 10000);
 
 app.get('/weather', (req, res) => {
   res.json({
-    humidity: humidity.toFixed(2),
+    Humidity: Humidity.toFixed(2),
     temperature: temperature.toFixed(2),
     airFlow: airFlow.toFixed(2)
   });
