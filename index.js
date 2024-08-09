@@ -60,13 +60,14 @@ app.post('/set-temperature', (req, res) => {
 });
 
 // Get the most recent weather data from the database
+// Get the most recent weather data from the database
 app.get('/weather', async (req, res) => {
   try {
     const latestWeather = await Weather.findOne().sort({ timestamp: -1 }); // Get the most recent entry
     if (latestWeather) {
       res.json({
         Humidity: latestWeather.Humidity.toFixed(2),
-        temperature: temperature.toFixed(2) // Use the temperature variable, not the one from the database
+        temperature: latestWeather.temperature.toFixed(2) // Use the temperature from the database
       });
     } else {
       res.status(404).json({ message: 'No weather data found' });
