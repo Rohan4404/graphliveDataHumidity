@@ -16,7 +16,6 @@ mongoose.connect(mongoUri)
   .then(() => {
     console.log('Connected to MongoDB');
   })
-  
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
   });
@@ -67,7 +66,7 @@ app.get('/weather', async (req, res) => {
     if (latestWeather) {
       res.json({
         Humidity: latestWeather.Humidity.toFixed(2),
-        temperature: latestWeather.temperature.toFixed(2)
+        temperature: temperature.toFixed(2) // Use the temperature variable, not the one from the database
       });
     } else {
       res.status(404).json({ message: 'No weather data found' });
@@ -77,6 +76,9 @@ app.get('/weather', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// Save initial weather data once when the server starts
+updateWeatherData();
 
 app.listen(port, () => {
   console.log(`Weather API listening at http://localhost:${port}`);
