@@ -32,6 +32,16 @@ const Weather = mongoose.model('Weather', weatherSchema);
 let humidity = Math.random() * 30 + 50; // Initial humidity
 let currentTemperature = 27; // Default initial temperature
 
+// Save initial weather data once when the server starts
+updateWeatherData();
+
+// Update humidity and store it in MongoDB every 10 seconds
+setInterval(() => {
+  humidity = Math.random() * 30 + 50; // Update humidity randomly
+  updateWeatherData(); // Save new humidity with the current temperature
+}, 10000);
+
+// Function to create a new weather data entry
 function updateWeatherData() {
   // Create a new weather data entry with the current humidity and temperature
   const newWeatherData = new Weather({
@@ -44,12 +54,6 @@ function updateWeatherData() {
     .then(() => console.log('Weather data saved to MongoDB'))
     .catch((error) => console.error('Error saving weather data:', error));
 }
-
-// Update humidity and store it in MongoDB every 10 seconds
-setInterval(() => {
-  humidity = Math.random() * 30 + 50; // Update humidity randomly
-  updateWeatherData(); // Save new humidity with the current temperature
-}, 10000);
 
 // Endpoint to set temperature from input
 app.post('/set-temperature', (req, res) => {
@@ -79,9 +83,6 @@ app.get('/weather', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-// Save initial weather data once when the server starts
-updateWeatherData();
 
 app.listen(port, () => {
   console.log(`Weather API listening at http://localhost:${port}`);
