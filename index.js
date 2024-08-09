@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 // Allow the frontend hosted at `127.0.0.1` to make requests to the backend
 const allowedOrigins = ['http://127.0.0.1:5500', 'https://graphlive-data-humidity-2a9hcjutu-rohan4404s-projects.vercel.app'];
 
+// CORS configuration
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
@@ -16,10 +17,15 @@ app.use(cors({
       return callback(new Error(msg), false);
     }
     return callback(null, true);
-  }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json()); // To parse JSON bodies
+
+// Define routes here...
+ // To parse JSON bodies
 
 // MongoDB connection string
 const mongoUri = process.env.MONGO_URI || "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0";
