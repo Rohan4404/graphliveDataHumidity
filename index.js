@@ -30,10 +30,10 @@ const weatherSchema = new mongoose.Schema({
 const Weather = mongoose.model('Weather', weatherSchema);
 
 let humidity = Math.random() * 30 + 50; // Initial humidity
-let currentTemperature = 20; // Default initial temperature
+let currentTemperature = 27; // Default initial temperature
 
 function updateWeatherData() {
-  // Create a new weather data entry with the current temperature
+  // Create a new weather data entry with the current humidity and temperature
   const newWeatherData = new Weather({
     Humidity: humidity.toFixed(2),
     temperature: currentTemperature.toFixed(2) // Use the latest temperature
@@ -45,8 +45,11 @@ function updateWeatherData() {
     .catch((error) => console.error('Error saving weather data:', error));
 }
 
-// Update weather data and store it in MongoDB every 10 seconds
-setInterval(updateWeatherData, 10000);
+// Update humidity and store it in MongoDB every 10 seconds
+setInterval(() => {
+  humidity = Math.random() * 30 + 50; // Update humidity randomly
+  updateWeatherData(); // Save new humidity with the current temperature
+}, 10000);
 
 // Endpoint to set temperature from input
 app.post('/set-temperature', (req, res) => {
