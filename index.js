@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 const allowedOrigins = ['http://127.0.0.1:5500', 'https://graphlive-data-humidity-2a9hcjutu-rohan4404s-projects.vercel.app'];
 
 // CORS configuration
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
@@ -19,8 +19,15 @@ app.use(cors({
     return callback(null, true);
   },
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+// Ensure you handle OPTIONS requests (preflight) separately if needed
+app.options('*', cors(corsOptions));
+
 
 app.use(express.json()); // To parse JSON bodies
 
