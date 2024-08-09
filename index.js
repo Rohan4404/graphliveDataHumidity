@@ -30,10 +30,28 @@ const weatherSchema = new mongoose.Schema({
 const Weather = mongoose.model('Weather', weatherSchema);
 
 let humidity = Math.random() * 30 + 50; // Initial humidity
-let currentTemperature = 27; // Default initial temperature
+let currentTemperature; // No default initial temperature
 
-// Save initial weather data once when the server starts
-updateWeatherData();
+// Function to fetch the latest temperature from the database
+async function fetchLatestTemperature() {
+  try {
+    const latestWeather = await Weather.findOne().sort({ timestamp: -1 }); // Get the most recent entry
+    if (latestWeather) {
+      currentTemperature = latestWeather.temperature; // Use the temperature from the database
+    } else {
+      currentTemperature = 20; // Fallback temperature if no data exists
+    }
+  } catch (error) {
+    console.error('Error fetching latest temperature:', error);
+    currentTemperature = 20; // Fallback temperature if there's an error
+  }
+}
+
+// Call the function to fetch the latest temperature when the server starts
+fetchLatestTemperature().then(() => {
+  // Save initial weather data once when the server starts
+  updateWeatherData();
+});
 
 // Update humidity and store it in MongoDB every 10 seconds
 setInterval(() => {
