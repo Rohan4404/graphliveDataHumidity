@@ -7,7 +7,7 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
-app.use(express.static('public')); // Serve static files from the 'public' directory
+// app.use(express.static('public')); // Serve static files from the 'public' directory
 
 // Correct MongoDB connection string
 const mongoUri = "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0";
@@ -16,6 +16,7 @@ mongoose.connect(mongoUri)
   .then(() => {
     console.log('Connected to MongoDB');
   })
+  
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
   });
