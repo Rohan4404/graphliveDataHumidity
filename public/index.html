@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Input</title>
+</head>
+<body>
+    <h1>Weather Input</h1>
+    <form id="weather-form">
+        <label for="temperature">Temperature:</label>
+        <input type="number" id="temperature" name="temperature" required>
+        <button type="submit">Update Temperature</button>
+    </form>
+
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const temperature = parseFloat(document.getElementById('temperature').value);
+
+            // Send the temperature to the server
+            fetch('http://localhost:3000/set-temperature', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ temp: temperature })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Show success message
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
