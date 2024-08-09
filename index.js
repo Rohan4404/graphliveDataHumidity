@@ -3,20 +3,18 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
-const port = 3000;
+const port = process.env.PORT || 3000; // Use environment variable for port
 
-app.use(cors());
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // To parse JSON bodies
-// app.use(express.static('public')); // Serve static files from the 'public' directory
 
-// Correct MongoDB connection string
-const mongoUri = "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0";
+// MongoDB connection string
+const mongoUri = process.env.MONGO_URI || "mongodb+srv://rohansharma99anc:FCkDAmWBuW3bEwRT@cluster0.o594z.mongodb.net/dataset?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(mongoUri)
   .then(() => {
     console.log('Connected to MongoDB');
   })
-  
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
   });
