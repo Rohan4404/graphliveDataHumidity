@@ -30,13 +30,13 @@ const weatherSchema = new mongoose.Schema({
 const Weather = mongoose.model('Weather', weatherSchema);
 
 let humidity = Math.random() * 30 + 50; // Initial humidity
-let temperature = 20; // Default initial temperature
+let currentTemperature = 20; // Default initial temperature
 
 function updateWeatherData() {
   // Create a new weather data entry with the current temperature
   const newWeatherData = new Weather({
     Humidity: humidity.toFixed(2),
-    temperature: temperature.toFixed(2) // Use the latest temperature
+    temperature: currentTemperature.toFixed(2) // Use the latest temperature
   });
 
   // Save the weather data to MongoDB
@@ -52,14 +52,13 @@ setInterval(updateWeatherData, 10000);
 app.post('/set-temperature', (req, res) => {
   const { temp } = req.body; // Get temperature from the request body
   if (typeof temp === 'number') {
-    temperature = temp; // Update the temperature variable
+    currentTemperature = temp; // Update the current temperature variable
     res.status(200).json({ message: 'Temperature updated successfully' });
   } else {
     res.status(400).json({ message: 'Invalid temperature value' });
   }
 });
 
-// Get the most recent weather data from the database
 // Get the most recent weather data from the database
 app.get('/weather', async (req, res) => {
   try {
